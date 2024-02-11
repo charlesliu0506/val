@@ -1,1 +1,291 @@
-
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+        <style>
+            #leftBar {
+                position: absolute;
+                width: 300px;
+                height: 100%;
+                padding: 0px;
+                background-color: rgb(240, 240, 240);
+            }
+            #question {
+                padding: 20px;
+                margin-top: 130px;
+                font-family: 'Dancing Script', cursive;
+                font-size: 36pt;
+            }
+            #messageBox {
+                border-radius: 20px;
+                padding: 10px;
+                font-family: Helvetica, Arial, sans-serif;
+                font-size: 15pt;
+                margin-top: 40px;
+                margin-left: 20px;
+                margin-right: 32px;
+                margin-bottom: 20px;
+                border-style: solid;
+                border-color: black;
+                border-width: 2px;
+            }
+            .yes {
+                border-radius: 20px;
+                background-color: rgb(139, 183, 222);
+                height: 120px;
+                width: 180px;
+                position: absolute;
+                text-align: center;
+                font-family: 'Dancing Script', cursive;
+                font-size: 60pt;
+                border-style: none;
+            }
+            .hYes {
+                border-radius: 20px;
+                background-color: rgb(139, 183, 222);
+                border-color: rgb(36, 47, 110);
+                border-width: 8px;
+                border-style: solid;
+                height: 120px;
+                width: 180px;
+                position: absolute;
+                text-align: center;
+                font-family: 'Dancing Script', cursive;
+                font-size: 60pt;
+            }
+            .bigYes {
+                border-radius: 30px;
+                background-color: rgb(139, 183, 222);
+                height: 250px;
+                width: 400px;
+                position: absolute;
+                text-align: center;
+                font-family: 'Dancing Script', cursive;
+                font-size: 120pt;
+                border-style: none;
+            }
+            .hBigYes {
+                border-radius: 30px;
+                background-color: rgb(139, 183, 222);
+                border-color: rgb(36, 47, 110);
+                border-width: 8px;
+                border-style: solid;
+                height: 250px;
+                width: 400px;
+                position: absolute;
+                text-align: center;
+                font-family: 'Dancing Script', cursive;
+                font-size: 120pt;
+            }
+            .saidYes {
+                border-radius: 35px;
+                background-color: rgb(171, 17, 125);
+                border-color: rgb(239, 142, 224);
+                border-width: 20px;
+                border-style: solid;
+                height: 300px;
+                width: 500px;
+                position: absolute;
+                text-align: center;
+                font-family: 'Dancing Script', cursive;
+                font-size: 60pt;
+                color: white;
+                z-index: 10;
+            }
+            .no {
+                border-radius: 20px;
+                background-color: rgb(220, 112, 112);
+                height: 120px;
+                width: 180px;
+                position: absolute;
+                text-align: center;
+                font-family: 'Dancing Script', cursive;
+                font-size: 60pt;
+                border-style: none;
+            }
+            .hNo {
+                border-radius: 20px;
+                background-color: rgb(220, 112, 112);
+                border-color: rgb(99, 41, 41);
+                border-width: 8px;
+                border-style: solid;
+                height: 120px;
+                width: 180px;
+                position: absolute;
+                text-align: center;
+                font-family: 'Dancing Script', cursive;
+                font-size: 60pt;
+            }
+            .invis {
+                display: none;
+            }
+            body {
+                background-color: rgb(176, 176, 176);
+                padding: 0px;
+                margin: 0px;
+            }
+        </style>
+        <script>
+            const winHeight = window.innerHeight;
+            const winWidth = window.innerWidth;
+            var final = false;
+            var yay = false;
+            class nBox {
+                constructor() {
+                    this.element = document.getElementById("nBox");
+                    this.top = winHeight / 2 - 60;
+                    this.left = 2 * winWidth / 3 + 10;
+                    this.element.className = "no";
+                    this.element.style.top = this.top.toString() + "px";
+                    this.element.style.left = this.left.toString() + "px";
+                    this.count = 0;
+                    this.mB = document.getElementById("messageBox");
+                }
+                hover() {
+                    if (this.runAway) {
+                        this.top -= 30;
+                        this.left -= 30;
+                        if (this.top < 10) {
+                            this.top = 10;
+                            this.left -= 30;
+                        }
+                        if (this.left < 310) {
+                            this.left = 310;
+                        }
+                        if (this.top == 10 && this.left == 310) {
+                            this.runAway = false;
+                            this.mB.innerText = "it seems you've backed me into a corner...";
+                        }
+                        this.element.style.top = this.top.toString() + "px";
+                        this.element.style.left = this.left.toString() + "px";
+                    }
+                    else if (!final && !yay) {
+                        this.element.style.top = (this.top - 8).toString() + "px";
+                        this.element.style.left = (this.left - 8).toString() + "px";
+                        this.element.className = "hNo";
+                    }
+                }
+                unhover() {
+                    if (!final && !yay) {
+                        this.element.style.top = (this.top).toString() + "px";
+                        this.element.style.left = (this.left).toString() + "px";
+                        this.element.className = "no";
+                    }
+                }
+                click() {
+                    if (yay || final) {
+                        this.count = 100;
+                    }
+                    else if (this.runAway) {
+                        this.count--;
+                    }
+                    else if (this.count == 0) {
+                        this.mB.innerText = "oh... :(\nplease try again?";
+                    }
+                    else if (this.count == 1) {
+                        this.mB.innerText = "please OMG i'm actually begging you to say yes";
+                    }
+                    else if (this.count == 2) {
+                        this.mB.innerText = "you're breaking my heart, ms. Hart...";
+                    }
+                    else if (this.count == 3) {
+                        this.mB.innerText = "NOOOOOOOOOO :(";
+                    }
+                    else if (this.count == 4) {
+                        this.mB.innerText = "STOP IT 😭😭😭";
+                    }
+                    else if (this.count == 5) {
+                        this.mB.innerText = "but i love you...";
+                        this.runAway = true;
+                        this.top -= 90;
+                        this.left -= 90;
+                        this.element.style.top = this.top.toString() + "px";
+                        this.element.style.left = this.left.toString() + "px";
+                    }
+                    else if (this.count == 6) {
+                        this.mB.innerText = "you leave me with no choice but to take away your choices";
+                        this.element.className = "invis";
+                        ones.element.className = "bigYes";
+                        final = true;
+                        ones.left = winWidth / 2 - 50;
+                        ones.top = winHeight / 2 - 125;
+                        ones.element.style.left = ones.left.toString() + "px";
+                        ones.element.style.top = ones.top.toString() + "px";
+                    }
+                    this.count++;
+                }
+            }
+            class yBox {
+                constructor() {
+                    this.element = document.getElementById("yBox");
+                    this.top = winHeight / 2 - 60;
+                    this.left = winWidth / 3 + 110;
+                    this.element.className = "yes";
+                    this.element.style.top = this.top.toString() + "px";
+                    this.element.style.left = this.left.toString() + "px";
+                    this.final = false;
+                }
+                hover() {
+                    if (final) {
+                        this.element.style.top = (this.top - 8).toString() + "px";
+                        this.element.style.left = (this.left - 8).toString() + "px";
+                        this.element.className = "hBigYes";
+                    }
+                    else if (!yay) {
+                        this.element.style.top = (this.top - 8).toString() + "px";
+                        this.element.style.left = (this.left - 8).toString() + "px";
+                        this.element.className = "hYes";
+                    }
+                }
+                unhover() {
+                    if (final) {
+                        this.element.style.top = (this.top).toString() + "px";
+                        this.element.style.left = (this.left).toString() + "px";
+                        this.element.className = "bigYes";
+                    }
+                    else if (!yay) {
+                        this.element.style.top = (this.top).toString() + "px";
+                        this.element.style.left = (this.left).toString() + "px";
+                        this.element.className = "yes";
+                    }
+                }
+                click() {
+                    document.getElementById("messageBox").innerText = "awwww i knew you'd agree! 🥰🥰🥰";
+                    this.element.className = "invis";
+                    zero.element.className = "invis";
+                    let yaytime = document.getElementById("yayy");
+                    yaytime.className = "saidYes";
+                    yaytime.innerText = "happy\nvalentine's\nday !!!!!!"
+                    yaytime.style.top = (winHeight / 2 - 170).toString() + "px";
+                    yaytime.style.left = (winWidth / 2 - 120).toString() + "px";
+                }
+            }
+        </script>
+        </head>
+    </head>
+    <body>
+        <div id = "leftBar">
+            <div id = "question">
+                will you be my valentine? ❤️
+            </div>
+            <div id = "messageBox">
+                please... please please please please please 🥺
+            </div>
+        </div>
+        <div id = "yBox" onclick="ones.click()" onmouseover = "ones.hover()" onmouseout = "ones.unhover()">
+            yes
+        </div>
+        <div id = "nBox" onclick="zero.click()" onmouseover = "zero.hover()" onmouseout = "zero.unhover()">
+            no
+        </div>
+        <div id = "yayy" class = "invis">
+        </div>
+        </div>
+        <script>
+            const zero = new nBox();
+            const ones = new yBox();
+        </script>
+    </body>
+</html>
